@@ -25,8 +25,6 @@
 	],
 	"devDependencies": {
 		"node-sass": "4.13.0",
-		"gulp": "4.0.2",
-		"del": "3.0.0",
 		"lazypipe": "1.0.1",
 		"gulp-flatmap": "1.0.2",
 		"gulp-header": "2.0.5",
@@ -43,5 +41,9 @@
 		"autoprefixer": "9.6.1",
 		"gulp-svgmin": "2.1.0",
 		"browser-sync": "2.26.7"
+	},
+	"dependencies": {
+		"del": "^6.0.0",
+		"gulp": "^4.0.2"
 	}
 }
