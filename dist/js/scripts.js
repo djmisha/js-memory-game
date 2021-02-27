@@ -73,11 +73,27 @@ function cardsMatch() {
 }
 
 function cardsDontMatch() {
+    disableClicks();
     setTimeout((function(){ 
         compareArray[0].classList.remove('card-visible');
         compareArray[0].classList.remove('remove-click');
         compareArray[1].classList.remove('card-visible');
         compareArray[1].classList.remove('remove-click');
         compareArray = [];
+        enableClicks();
     }), 1000);
+}
+
+function disableClicks() {
+    var allCards = document.querySelectorAll(".card");
+    for (var i = 0; i < allCards.length; i++) {
+        allCards[i].classList.add('remove-click');
+    }
+}
+
+function enableClicks() {
+    var allCards = document.querySelectorAll(".card");
+    for (var i = 0; i < allCards.length; i++) {
+        allCards[i].classList.remove('remove-click');
+    }
 }
