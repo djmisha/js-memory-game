@@ -1,142 +1,83 @@
 /*! JS Memory Game v0.0.1 | (c) 2021 Misha | MIT License | # */
-(function () {
-    var game = document.querySelector(".game");
+var cards = [ { id: 1, }, { id: 2, }, { id: 3, }, { id: 4, }, { id: 5, }, { id: 6, }, { id: 7, }, { id: 8, }, { id: 9, }, { id: 10, }, { id: 11, }, { id: 12, }, ];
+var game = document.querySelector(".game");
+var duplicateDeck = [];
 
-    function dupeAndShuffleCards(cards) {
-        let duplicateDeck = [];
-        for (var i = 0; i < cards.length; i++) {
-            var singleCard = cards[i];
-            duplicateDeck.push(singleCard);
-            duplicateDeck.push(singleCard);
-        }
-        var shuffleDeck = duplicateDeck.sort(() => Math.random() - 0.5);
-
-        return shuffleDeck;
+function duplicateCards() {
+    for (var i = 0; i < cards.length; i++) {
+        var singleCard = cards[i];
+        duplicateDeck.push(singleCard);
+        duplicateDeck.push(singleCard);
     }
+}
 
-    function createCardElements(cards) {
-        for (var i = 0; i < cards.length; i++) {
-            var cardName = cards[i].name;
-            var cardImage = cards[i].img;
-            var cardID = cards[i].id;
+duplicateCards();
 
-            var cardElement = document.createElement("div");
-            cardElement.classList.add("back");
-            cardElement.setAttribute("id", cardID);
-            cardElement.setAttribute("name", cardName);
-            cardElement.innerHTML = "<img src=" + cardImage + ">";
+function shuffleCards() {
+  var currentIndex = duplicateDeck.length, temporaryValue, randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = duplicateDeck[currentIndex];
+    duplicateDeck[currentIndex] = duplicateDeck[randomIndex];
+    duplicateDeck[randomIndex] = temporaryValue;
+  }
+}
 
-            game.appendChild(cardElement);
+shuffleCards();
+
+function createCardElements() {
+    for (var i = 0; i < duplicateDeck.length; i++) {
+        var cardID = duplicateDeck[i].id;
+
+        var cardElement = document.createElement("div");
+        cardElement.classList.add("card");
+        cardElement.setAttribute("id", cardID);
+        cardElement.innerHTML = cardID;
+        cardElement.addEventListener("click", showTheCard);
+        cardElement.addEventListener("click", compareCards);
+
+        game.appendChild(cardElement);
+    }
+}
+
+createCardElements();
+
+function showTheCard() {
+    this.classList.add("card-visible");
+    this.classList.add("remove-click");
+}
+
+var compareArray = [];
+
+function compareCards(event) {
+    compareArray.push(this);
+    console.log(compareArray);
+    if (compareArray.length === 2) {
+        if (compareArray[0].innerText === compareArray[1].innerText) {
+            cardsMatch();
+        } else {
+            cardsDontMatch();
         }
     }
+}
 
-    function compareCards() {
-        let placedCards = document.querySelectorAll(".game > div");
-        var compareArray = [];
-        for (let i = 0; i < placedCards.length; i++) {
-            const card = placedCards[i];
-            card.addEventListener("click", compare);
-        }
-        function compare(event) {
-            compareArray.push(event.target);
-            // pauseCard(event.target);
-            console.log("clicked", event.target);
-            if (compareArray.length === 2) {
-                if (compareArray[0] === compareArray[1]) {
-                    console.log("match");
-                    compareArray.pop(compareArray[0]);
-                    compareArray.pop(compareArray[1]);
-                    event.target.remove();
-                } else {
-                    console.log("not match");
-                    compareArray.pop(compareArray[0]);
-                    compareArray.pop(compareArray[1]);
-                }
-            }
-        }
+function cardsMatch() {
+    compareArray[0].classList.add('card-finished');
+    compareArray[1].classList.add('card-finished');
+    compareArray[0].classList.remove('card-visible');
+    compareArray[0].classList.remove('remove-click');
+    compareArray[1].classList.remove('card-visible');
+    compareArray[1].classList.remove('remove-click');
+    compareArray = [];
+}
 
-        function pauseCard(card) {
-            // card.removeEventListener("click", compare);
-        }
-        // console.log(placedCards);
-    }
-
-    var cards = [
-        {
-            name: "php",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/php-logo_1.png",
-            id: 1,
-        },
-        {
-            name: "css3",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/css3-logo.png",
-            id: 2,
-        },
-        {
-            name: "html5",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/html5-logo.png",
-            id: 3,
-        },
-        {
-            name: "jquery",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/jquery-logo.png",
-            id: 4,
-        },
-        {
-            name: "javascript",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/js-logo.png",
-            id: 5,
-        },
-        {
-            name: "node",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/nodejs-logo.png",
-            id: 6,
-        },
-        {
-            name: "photoshop",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/photoshop-logo.png",
-            id: 7,
-        },
-        {
-            name: "python",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/python-logo.png",
-            id: 8,
-        },
-        {
-            name: "rails",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/rails-logo.png",
-            id: 9,
-        },
-        {
-            name: "sass",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/sass-logo.png",
-            id: 10,
-        },
-        {
-            name: "sublime",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/sublime-logo.png",
-            id: 11,
-        },
-        {
-            name: "wordpress",
-            img:
-                "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/wordpress-logo.png",
-            id: 12,
-        },
-    ];
-
-    let deck = dupeAndShuffleCards(cards);
-    createCardElements(deck);
-    compareCards();
-})();
+function cardsDontMatch() {
+    setTimeout((function(){ 
+        compareArray[0].classList.remove('card-visible');
+        compareArray[0].classList.remove('remove-click');
+        compareArray[1].classList.remove('card-visible');
+        compareArray[1].classList.remove('remove-click');
+        compareArray = [];
+    }), 1000);
+}
